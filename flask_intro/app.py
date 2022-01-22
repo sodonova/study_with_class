@@ -67,6 +67,7 @@ def get_ical():
         # imaginary_ical_func(link)
         # store users free time (presumably sql)
         # when they click submit, we want to redirect them to a confirmation page that gives them the group chat
+        return redirect()
 
 @app.route('/confirm')
 def confirm():
