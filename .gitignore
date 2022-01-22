@@ -1,6 +1,8 @@
+venv
 
 # dependencies
 /node_modules
+ReactLoginRegisterUI/node_modules
 /.pnp
 .pnp.js
 .next

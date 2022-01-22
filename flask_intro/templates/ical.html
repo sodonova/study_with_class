@@ -1,0 +1,23 @@
+<html>
+  <head>
+    <title>ical drop</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
+  </head>
+  <body>
+    <div class="container">
+      <h1>Paste your ical url here</h1>
+      <br>
+
+      <form action="" method="post">
+        <input type="text" placeholder=".ics" name="icalurl" value="{{
+          request.form.icalurl }}">
+        <input class="btn btn-default" type="submit" value="Submit">
+      </form>
+      {% if error %}
+        <p class="error"><strong>Error:</strong> {{ error }}
+      {% endif %}
+    </div>
+
+  </body>
+</html>
