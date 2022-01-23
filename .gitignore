@@ -1,6 +1,7 @@
 venv
 config
 
+flask_intro/__pycache__
 # dependencies
 /node_modules
 ReactLoginRegisterUI/node_modules
