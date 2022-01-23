@@ -96,7 +96,8 @@ def ical():
         db.close()
         # when they click submit, we want to redirect them to a confirmation page that gives them the group chat
         return redirect(url_for('confirm'))
-
+def insert_single_table(phone, day_value_list):
+    pass
 def insert_into(day_timeslots, cur):
         mon = [session['phone']]
         mon += retrieve_list_of_timeslots(day_timeslots[0])
