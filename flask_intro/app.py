@@ -2,6 +2,7 @@
 # from crypt import methods
 import logging
 import sqlite3
+from tkinter import READABLE
 from flask import Flask, render_template, redirect, url_for, request, session
 from flask_sqlalchemy import SQLAlchemy
 from functools import wraps
@@ -15,6 +16,8 @@ app.database = "test.db"
 # db = SQLAlchemy(app)
 TIMES = ['700', '750', '800', '850', '900', '950', '1000', '1050', '1100', '1150', '1200', '1250', '1300', '1350', '1400', '1450', '1500', '1550', '1600', '1650', '1700', '1750', '1800', '1850', '1900', '1950', '2000', '2050']
 DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+READABLE_TIME = {'700': "7:00AM", '750': "7:30AM", '800':"8:00AM", '850':"8:30AM", '900':"9:00AM", '950':"9:30AM", '1000':"10:00AM", '1050':"10:30AM", '1100':"11:00AM", '1150':"11:30AM", '1200':"12:00PM", '1250':"12:30AM", '1300':"1:00PM", '1350':"1:30PM", 
+        '1400':"2:00PM", '1450':"2:30PM", '1500':"3:00PM", '1550':"3:30PM", '1600':"4:00PM", '1650':"4:30", '1700':"5:00PM", '1750':"5:30PM", '1800':"6:00PM", '1850':"6:30PM", '1900':0, '1950':"7:00PM", '2000':"8:00PM", '2050':"8:30PM"}
 def login_required(f):
     @wraps(f)
     def wrap(*args, **kwargs):
@@ -137,6 +140,14 @@ def retrieve_list_of_timeslots(daydict) -> list:
 
 @app.route('/confirm')
 def confirm():
+    # check if the user
+    session['phone']
+    # has good enough free sections to text
+    if True: # assume good enough
+        class_list = create_class_list
+        con = sqlite3.connect('test.db')
+        too_many_slots = get_same_timeslot(con)
+        determine_study_time_frame()
     return render_template('confirm.html',error=None)
 
 @app.route('/welcome')
@@ -150,6 +161,76 @@ if __name__ == '__main__':
 def retrieve_list_of_classes(icalurl) -> list:
     # assume we get it
     return ['CS 30700', 'CS 44800']
+
+conn = sqlite3.connect('test.db')
+
+def create_class_list(conn) -> dict():
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM enrolled")
+
+    rows = cur.fetchall()
+    class_list = dict()
+    
+    for row in rows:
+        if row[1] not in class_list:
+            class_list[row[1]] = row[0]
+        else:
+            class_list[row[1]] = class_list[row[1]] + "," + row[0]
+
+    return class_list
+
+def get_same_timeslot(conn) -> dict:
+    class_list = create_class_list(conn)
+    cur = conn.cursor()
+
+    for i in class_list:
+        print(i)
+        slots = {'700':0, '750':0, '800':0, '850':0, '900':0, '950':0, '1000':0, '1050':0, '1100':0, '1150':0, '1200':0, '1250':0, '1300':0, '1350':0, 
+        '1400':0, '1450':0, '1500':0, '1550':0, '1600':0, '1650':0, '1700':0, '1750':0, '1800':0, '1850':0, '1900':0, '1950':0, '2000':0, '2050':0}
+        
+        please = list()
+        print(class_list[i])
+        for phone in class_list[i].split(','):
+            cur.execute("SELECT * FROM Monday WHERE phone=?", (phone,))
+            rows = cur.fetchall()
+            please.append(rows)
+        # Find study time slots
+        for slot in range(1, 29):
+            value = 0
+            for tuples in please:
+                for user in tuples:
+                    value+=int(user[slot])
+
+            if value == 0:
+                slots[TIMES[slot - 1]] = 0
+            else:
+                slots[TIMES[slot - 1]] = 1
+
+        # print(please)
+        print (slots)
+        determine_study_time_frame(slots, "lol")
+
+def determine_study_time_frame(slots, day) -> list():
+    start = 0
+    end = 0
+    frames = list()
+    for interval in TIMES:
+        if slots[interval] == 0  and start == 0:
+            start = interval
+        elif start != 0 and (slots[interval] == 1 or interval == TIMES[-1]):
+            end = interval
+
+        if end != 0:
+            frames.append((READABLE_TIME[start], READABLE_TIME[end]))
+            start = end = 0
+    print(frames)
+
+def send_twilio(phone_list, frames) -> None:
+                
+            
+
+create_class_list(conn)
+get_same_timeslot(conn)
 
 # def send_twilio(["6147023950", "6147023950","6147023950"], abritrary_string):
 #     # send arbitrary_string
