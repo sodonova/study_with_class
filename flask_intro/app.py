@@ -1,10 +1,11 @@
 # import the Flask class from the flask module
 # from crypt import methods
-from multiprocessing import dummy
+import logging
 import sqlite3
 from flask import Flask, render_template, redirect, url_for, request, session
 from flask_sqlalchemy import SQLAlchemy
 from functools import wraps
+import icalparser as ip
 
 # create the application object
 app = Flask(__name__)
@@ -73,33 +74,69 @@ def ical():
         # just display template
         return render_template('ical.html',error=error)
     elif request.method == 'POST':
-        db = sqlite3.connect('test.db')
-        cur = db.cursor()
         # get user's ical link
         link = request.form['icalurl']
         print(link)
+
+        db = sqlite3.connect('test.db')
+        cur = db.cursor()
         # store users free time (presumably sql)
         classes = retrieve_list_of_classes(link)
         for cid in classes:
-            cur.execute("INSERT INTO enrolled (phone, class) VALUES (?, ?);",(session['phone'],cid))
+            try:
+                cur.execute("INSERT INTO enrolled (phone, class) VALUES (?, ?);",(session['phone'],cid))
+            except sqlite3.IntegrityError:
+                logging.warning(f"Can't reuse same phonum {session['phone']}, class {cid}")
+                return render_template('ical.html', error="Can't reuse the same phone number, try again?")
         # ical procedures will return 5 dicts, one for each day.
-        # returned_dicts = [] * 5
-        # for day in DAYS:
-            
+        day_timeslots = ip.get_timeslots(ip.get_ics(link))
+        insert_into(day_timeslots, cur) # large repetitive sql operation
+
         db.commit()
         db.close()
         # when they click submit, we want to redirect them to a confirmation page that gives them the group chat
-        return redirect()
+        return redirect(url_for('confirm'))
 
-def retrieve_list_of_classes (icalurl) -> list:
+def insert_into(day_timeslots, cur):
+        mon = [session['phone']]
+        mon += retrieve_list_of_timeslots(day_timeslots[0])
+        # 29 ?s because 28 half hours + 1 phone num.
+        cur.execute("INSERT INTO Monday VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);", mon)
+
+        tues = [session['phone']]
+        tues += retrieve_list_of_timeslots(day_timeslots[1])
+        # 29 ?s because 28 half hours + 1 phone num.
+        cur.execute("INSERT INTO Tuesday VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);", tues)
+
+        wed = [session['phone']]
+        wed += retrieve_list_of_timeslots(day_timeslots[2])
+        # 29 ?s because 28 half hours + 1 phone num.
+        cur.execute("INSERT INTO Wednesday VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);", wed)
+
+        thurs = [session['phone']]
+        thurs += retrieve_list_of_timeslots(day_timeslots[3])
+        # 29 ?s because 28 half hours + 1 phone num.
+        cur.execute("INSERT INTO Thursday VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);", thurs)
+
+        fri = [session['phone']]
+        fri += retrieve_list_of_timeslots(day_timeslots[4])
+        # 29 ?s because 28 half hours + 1 phone num.
+        cur.execute("INSERT INTO Friday VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);", fri)
+
+def retrieve_list_of_classes (icalurl) -> set:
     # assume we get it
-    return ['CS 30700', 'CS 44800']
+    cal = ip.get_ics(icalurl)
+    return ip.get_classes(cal)
+def retrieve_list_of_timeslots(daydict) -> tuple:
+    slots = []
+    for i in TIMES:
+        slots.append(daydict[i]) # ensures order is preserved
+    return slots
 
 
 @app.route('/confirm')
 def confirm():
-    
-    pass
+    return render_template('confirm.html',error=None)
 
 @app.route('/welcome')
 def welcome():
