@@ -23,11 +23,10 @@
 		      	<h3 class="mb-4 text-center">Have an account?</h3>
 		      	<form action="" method="post" class="signin-form">
 		      		<div class="form-group">
-		      			<input type="text" class="form-control" placeholder="Username" value="{{request.form.username }}">
+		      			<input type="text" class="form-control" placeholder="Number" name = "phone" value="{{request.form.phone }}">
 		      		</div>
 	            <div class="form-group">
-	              <input id="password-field" type="password" class="form-control" placeholder="Password" value="{{
-                  request.form.password }}" >
+	              <input id="password-field" type="password" class="form-control" placeholder="Password" >
 	              <span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span>
 	            </div>
 	            <div class="form-group">
