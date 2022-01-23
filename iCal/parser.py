@@ -60,7 +60,7 @@ for event in events:
             tue[start_time] = 1
         if day == WE:
             wed[start_time] = 1
-        if TR == TR:
+        if day == TR:
             thu[start_time] = 1
         if day == FR:
             fri[start_time] = 1
