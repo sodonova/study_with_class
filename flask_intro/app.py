@@ -58,7 +58,7 @@ def verify_login(phonenum):
 @app.route('/logout')
 def logout():
     session.pop('logged_in',None)
-    return redirect(url_for('home'))
+    return redirect(url_for('login'))
 
 # d.execute("CREATE TABLE enrolled (phone TEXT NOT NULL, class TEXT NOT NULL, PRIMARY KEY(phone,class));")
 # for day in days:                                          
@@ -128,7 +128,7 @@ def retrieve_list_of_classes (icalurl) -> set:
     # assume we get it
     cal = ip.get_ics(icalurl)
     return ip.get_classes(cal)
-def retrieve_list_of_timeslots(daydict) -> tuple:
+def retrieve_list_of_timeslots(daydict) -> list:
     slots = []
     for i in TIMES:
         slots.append(daydict[i]) # ensures order is preserved
