@@ -2,7 +2,7 @@ import os
 from pydoc import cli
 from twilio.rest import Client
 
-phonenum = ["3172497574","9148067766", "7658389656"] # "6147023950"
+phonenum = ["3172497574","9148067766", "7658389656", "6147023950"] # "6147023950"
 
 
 # Your Account SID from twilio.com/console
@@ -34,7 +34,7 @@ message = client.conversations \
     .conversations('CHaca7ccf263504d7589898b02eee805b5') \
     .messages \
     .create(
-         body='This is the class  chat!',
+         body='We found other users in CS 30700 with an open time slot to study @ 4:30-5:30 on Friday. Say Hi!',
          author='twilio'
      )
 

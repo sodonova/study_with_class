@@ -226,7 +226,7 @@ def determine_study_time_frame(slots, day) -> list():
     print(frames)
 
 def send_twilio(phone_list, frames) -> None:
-                
+    return
             
 
 create_class_list(conn)
