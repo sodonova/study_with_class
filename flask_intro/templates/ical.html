@@ -1,22 +1,45 @@
 <html>
   <head>
     <title>ical drop</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="../static/login-form-20/css/style.css">
   </head>
-  <body>
+  <body class="img js-fullheight" style="background-image: url(../static/login-form-20/images/bg.jpg);">
     <div class="container">
-      <h1>Paste your ical url here</h1>
-      <br>
+      <div class="row justify-content-center">
+				<div class="col-md-6 text-center mb-5">
+					<h2 class="heading-section">Import  Calandar</h2>
+				</div>
+			</div>
 
-      <form action="" method="post">
+
+      <div class="row justify-content-center">
+				<div class="col-md-6 col-lg-4">
+					<div class="login-wrap p-0">
+		      	<h3 class="mb-4 text-center">Paste your ical url here</h3>
+		      	<form action="" method="post" class="signin-form">
+		      		<div class="form-group">
+                <input type="text" placeholder=".ics" name="icalurl">
+		      		</div>
+	          
+	            
+	            
+	          </form>
+	          <button type="button" onclick="window.location.href= './times.html';" class="btn btn-primary btn-lg btn-block"> Search </button>
+		      </div>
+				</div>
+			</div>
+    
+
+      <!-- <form action="" method="post">
         <input type="text" placeholder=".ics" name="icalurl" value="{{
           request.form.icalurl }}">
         <input class="btn btn-default" type="submit" value="Submit">
-      </form>
-      {% if error %}
-        <p class="error"><strong>Error:</strong> {{ error }}
-      {% endif %}
+      </form> -->
+      
     </div>
 
   </body>

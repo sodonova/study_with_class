@@ -229,8 +229,8 @@ def send_twilio(phone_list, frames) -> None:
                 
             
 
-create_class_list(conn)
-get_same_timeslot(conn)
+    create_class_list(conn)
+    get_same_timeslot(conn)
 
 # def send_twilio(["6147023950", "6147023950","6147023950"], abritrary_string):
 #     # send arbitrary_string

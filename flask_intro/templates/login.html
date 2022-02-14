@@ -23,7 +23,7 @@
 		      	<h3 class="mb-4 text-center">Have an account?</h3>
 		      	<form action="" method="post" class="signin-form">
 		      		<div class="form-group">
-		      			<input type="text" class="form-control" placeholder="Number" name = "phone" value="{{request.form.phone }}">
+		      			<input type="text" class="form-control" placeholder="Number" name = "phone" value="Number">
 		      		</div>
 	            <div class="form-group">
 	              <input id="password-field" type="password" class="form-control" placeholder="Password" >
@@ -31,7 +31,7 @@
 	            </div>
 	            <div class="form-group">
                 
-	            	<input class="form-control btn btn-primary submit px-3" type="submit" value="Sign In">
+	            	<button type="button" onclick="window.location.href= './ical.html';" class="btn btn-primary btn-lg btn-block"> Sign In </button>
 	            </div>
 	            <div class="form-group d-md-flex">
 	            	<div class="w-50">
@@ -61,9 +61,7 @@
           request.form.password }}">
         <input class="btn btn-default" type="submit" value="Login">
       </form> -->
-      {% if error %}
-        <p class="error"><strong>Error:</strong> {{ error }}
-      {% endif %}
+      
     </div>
 
 
